@@ -1,6 +1,7 @@
 # admx
 
 Linux tools and scripts usefull to admin and manage machines. Started to be a practise bash scripts, becoming a base framework for administration and automate several tasks through many (a lot) servers.
+(Scripts submitted to SAST tools)
 
 # Commands
 
