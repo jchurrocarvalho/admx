@@ -22,7 +22,7 @@ usage()
 
 if [ "$3" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 DNSDOMAIN="$1"
@@ -30,4 +30,7 @@ HOSTNAME="$2"
 CNAME="$3"
 
 ipa dnsrecord-add "$DNSDOMAIN" "$HOSTNAME" --cname-rec "$CNAME"
+retvalue=$?
+
+exit $retvalue
 

@@ -22,7 +22,7 @@ usage()
 
 if [ "$1" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 PKICA_CA_HOME_BASE=/usr/local/etc/pki/ca
@@ -34,4 +34,6 @@ else
     PKICA_CA_HOME="$PKICA_CA_HOME_BASE"/"$1"
 fi
 export PKICA_CA_HOME
+
+exit 0
 

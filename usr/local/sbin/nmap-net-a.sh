@@ -22,11 +22,11 @@ usage()
 
 if [ "$2" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
-NETWORK=$1
-PATHFILETITLE=$2
+NETWORK="$1"
+PATHFILETITLE="$2"
 
 # redirect stdin and stderr for PATHFILETITLE.txt
 touch "$PATHFILETITLE".txt
@@ -34,6 +34,11 @@ exec 1>"$PATHFILETITLE".txt
 exec 2>&1
 
 nmap -v -A -oA  "$PATHFILETITLE" "$NETWORK"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 
 echo ""
 echo "================================"
@@ -42,10 +47,17 @@ echo "================================"
 echo ""
 
 xsltproc "$PATHFILETITLE".xml -o "$PATHFILETITLE".html
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 
 echo ""
 echo "================================"
-echo "end of build html output""
+echo "end of build html output"
 echo "================================"
 echo ""
+
+exit 0
 

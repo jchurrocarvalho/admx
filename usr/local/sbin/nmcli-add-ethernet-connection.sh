@@ -22,7 +22,7 @@ usage()
 
 if [ "$1" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 device_name="$1"
@@ -34,6 +34,8 @@ echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 echo ""
 
 nmcli connection add type ethernet con-name "$connection_name" connection.interface-name "$device_name"
-
 #nmcli connection modify $device_name autoconnect yes
+retvalue=$?
+
+exit $retvalue
 

@@ -22,7 +22,7 @@ usage()
 
 if [ "$1" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 hostname="$1"
@@ -32,5 +32,8 @@ echo "NetworkManager set hostname: $hostname"
 echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo ""
 
-nmcli general hostname $hostname
+nmcli general hostname "$hostname"
+retvalue=$?
+
+exit $retvalue
 

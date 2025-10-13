@@ -14,7 +14,7 @@
 # WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-old_kernels=($(dnf repoquery --installonly --latest-limit=-1 -q))
+old_kernels=("$(dnf repoquery --installonly --latest-limit=-1 -q)")
 if [ "${#old_kernels[@]}" -eq 0 ]; then
     echo "No old kernels found"
     exit 0
@@ -22,7 +22,7 @@ fi
 
 if ! dnf remove "${old_kernels[@]}"; then
     echo "Failed to remove old kernels"
-    exit 1
+    exit 2
 fi
 
 echo "Removed old kernels"

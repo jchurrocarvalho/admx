@@ -20,10 +20,13 @@ usage()
     echo "Usage: ipa-user-password.sh <username>"
 }
 
-if [ "$1" = "" ] then
+if [ "$1" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 ipa user-mod "$1" --password
+retvalue=$?
+
+exit $retvalue
 

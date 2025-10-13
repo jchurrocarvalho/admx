@@ -22,7 +22,7 @@ usage()
 
 if [ "$1" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 # setsebool -P samba_export_all_ro on
@@ -36,5 +36,14 @@ echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 echo ""
 
 semanage fcontext --add --type "samba_share_t" "$share_path(/.*)?"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
+
 restorecon -R "$share_path"
+retvalue=$?
+
+exit $retvalue
 

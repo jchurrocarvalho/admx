@@ -26,11 +26,14 @@ usage()
 
 if [ "$2" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 HOSTNAME="$1"
 DISPLAYNUM="$2"
 
-xauth remove $HOSTNAME/unix:$DISPLAYNUM
+xauth remove "$HOSTNAME"/unix:"$DISPLAYNUM"
+retvalue=$?
+
+exit $retvalue
 

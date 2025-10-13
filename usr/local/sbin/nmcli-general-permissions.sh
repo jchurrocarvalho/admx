@@ -20,3 +20,5 @@ echo ""
 
 nmcli general permissions
 
+exit 0
+

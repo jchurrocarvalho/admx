@@ -19,4 +19,7 @@ echo "---- nmcli connection reload ----"
 echo ""
 
 nmcli connection reload
+retvalue=$?
+
+exit $retvalue
 

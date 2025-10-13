@@ -22,7 +22,7 @@ usage()
 
 if [ "$2" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 device_name="$1"
@@ -37,10 +37,26 @@ echo ""
 
 #nmcli connection add type bridge con-name bridge-br0 ifname br0
 nmcli connection add type bridge con-name "$connection_name" connection.interface-name "$device_name"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
+
 nmcli connection add type bridge-slave con-name "$slave_connection_name" connection.interface-name "$slave_device_name" master "$device_name"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 
 # STP no
 nmcli connection modify "$connection_name" bridge.stp no
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 
 #
 # next you should
@@ -53,4 +69,6 @@ nmcli connection modify "$connection_name" bridge.stp no
 # at the end to activate slave connection and active $connection_name for traffic
 # nmcli connection delete "connection name for slave device" (usually same name as $slave_device_name)
 #
+
+exit 0
 

@@ -22,10 +22,8 @@ usage()
 
 if [ "$3" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
-
-hostname=$(eval 'hostname')
 
 user="$1"
 host_to_dnf="$2"
@@ -49,7 +47,8 @@ echo "Using dnf options: $dnf_args"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo ""
 
-ssh $user@$host_to_dnf sh -c "\"dnf $dnf_args\""
+ssh "$user@$host_to_dnf" sh -c "\"dnf $dnf_args\""
+retvalue=$?
 
-exit 0
+exit $retvalue
 

@@ -38,3 +38,5 @@ echo ""
 echo "---- Environment vars ----"
 set|grep DISPLAY
 
+exit 0
+

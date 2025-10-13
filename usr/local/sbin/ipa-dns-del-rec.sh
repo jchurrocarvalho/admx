@@ -22,11 +22,14 @@ usage()
 
 if [ "$2" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 DNSDOMAIN="$1"
 HOSTNAME="$2"
 
 ipa dnsrecord-del "$DNSDOMAIN" "$HOSTNAME"
+retvalue=$?
+
+exit $retvalue
 

@@ -22,17 +22,46 @@ usage()
 
 if [ "$5" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 ipa service-add HTTP/"$2"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 
-certutil -A -d "$1" -n '$3 IPA CA' -t CT,, -a < /etc/ipa/ca.crt
+certutil -A -d "$1" -n "$3 IPA CA" -t CT,, -a < /etc/ipa/ca.crt
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 
 ipa-getcert request -d "$1" -n "$5" -K HTTP/"$2" -N CN="$2",O="$3" -g 4096 -D "$4"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 
 ipa-getcert list -d "$1/" -n "$5"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 
 certutil -L -d "$1" -n "$5"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
+
 certutil -V -u V -d "$1" -n "$5"
+retvalue=$?
+
+exit $retvalue
 

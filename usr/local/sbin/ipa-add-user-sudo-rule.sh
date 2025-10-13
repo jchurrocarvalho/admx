@@ -15,4 +15,7 @@
 #
 
 ipa sudorule-add-user sudoall --group wheelusers
+retvalue=$?
+
+exit $retvalue
 

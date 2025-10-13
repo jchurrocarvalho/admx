@@ -24,9 +24,18 @@ usage()
 
 if [ "$1" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 cp -v /etc/ipa/ca.crt /etc/pki/ca-trust/source/anchors/ipa-ca-"$1".crt
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
+
 update-ca-trust
+retvalue=$?
+
+exit $retvalue
 

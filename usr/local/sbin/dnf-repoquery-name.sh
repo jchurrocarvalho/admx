@@ -19,4 +19,7 @@ if [ -L "/usr/bin/dnf4" ] || [ -e "/usr/bin/dnf4" ]; then
 else
     dnf repoquery --queryformat '%{name}' "$@"
 fi
+retvalue=$?
+
+exit $retvalue
 

@@ -22,7 +22,7 @@ usage()
 
 if [ "$1" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 hostname=$(eval 'hostname')
@@ -31,10 +31,15 @@ targethostname=""
 port=""
 
 i=0
+retvalueend=0
 
-for line in $(cat "$1"); do
+INPUTFILENAME="$1"
+
+#for line in $(cat "$INPUTFILENAME"); do
+while IFS= read -r line
+do
     if [ -n "$line" ]; then
-        if [ "${line:0:1}" != "#" ]]; then
+        if [ "${line:0:1}" != "#" ]; then
             if [ "${line:0:1}" = "P" ]; then
                 port=""
                 i=1
@@ -52,12 +57,17 @@ for line in $(cat "$1"); do
                 echo "================================================================"
                 echo "host: $targethostname:$port"
                 echo "================================================================"
-                ssh -p "$port" "$targethostname" loginctl
+                ssh -n -p "$port" "$targethostname" loginctl
+                retvalue=$?
+                if [ "$retvalue" != "0" ]; then
+                    echo "An error was returned. {Host: $targethostname, Port: $port}, {Line: $LINENO, Error Code: $retvalue}"
+                    retvalueend=$retvalue
+                fi
                 echo ""
             fi
         fi
     fi
-done
+done < "$INPUTFILENAME"
 
-exit 0
+exit $retvalueend
 

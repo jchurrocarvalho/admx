@@ -22,7 +22,7 @@ usage()
 
 if [ "$2" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 connection_name="$1"
@@ -33,5 +33,8 @@ echo "NetworkManager set autoconnect. connection name: $connection_name, yes/no:
 echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo ""
 
-nmcli connection modify "$connection_name" autoconnect $auto
+nmcli connection modify "$connection_name" autoconnect "$auto"
+retvalue=$?
+
+exit $retvalue
 

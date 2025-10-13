@@ -20,3 +20,5 @@ echo ""
 
 nmcli general hostname
 
+exit 0
+

@@ -19,4 +19,7 @@ echo "---- nmcli networking connectivity check ----"
 echo ""
 
 nmcli networking connectivity check
+retvalue=$?
+
+exit $retvalue
 

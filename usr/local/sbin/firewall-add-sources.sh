@@ -22,12 +22,21 @@ usage()
 
 if [ "$2" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 FWZONE="$1"
 SOURCEADDRESS="$2"
 
-firewall-cmd --zone=$FWZONE --add-source=$SOURCEADDRESS
+firewall-cmd --zone="$FWZONE" --add-source="$SOURCEADDRESS"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
+
 firewall-cmd --runtime-to-permanent
+retvalue=$?
+
+exit $retvalue
 

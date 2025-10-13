@@ -23,22 +23,50 @@ usage()
 
 if [ "$2" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 echo -n "Have you already created the DNS entry? (Press [y] to continue or any key else to stop): "
-read dns_entry_already_created
+read -r dns_entry_already_created
 
 if [ "$dns_entry_already_created" = "y" ] || [ "$dns_entry_already_created" = "Y" ]; then
     ipa host-add "$1"
+    retvalue=$?
+    if [ "$retvalue" != "0" ]; then
+        echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+        exit $retvalue
+    fi
+
     ipa host-add-managedby "$1" --hosts="$2"
+    retvalue=$?
+    if [ "$retvalue" != "0" ]; then
+        echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+        exit $retvalue
+    fi
+
     ipa service-add HTTP/"$1"
+    retvalue=$?
+    if [ "$retvalue" != "0" ]; then
+        echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+        exit $retvalue
+    fi
+
     ipa service-add-host HTTP/"$1" --hosts="$2"
+    retvalue=$?
+    if [ "$retvalue" != "0" ]; then
+        echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+        exit $retvalue
+    fi
 
     ipa-getcert request -r -f /etc/pki/tls/certs/http_"$1".crt -k /etc/pki/tls/private/http_"$1".key -N CN="$1" -D "$1" -K HTTP/"$1"
-    
+    retvalue=$?
+    if [ "$retvalue" != "0" ]; then
+        echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+        exit $retvalue
+    fi
+
     exit 0
 else
-    exit 1
+    exit 2
 fi
 

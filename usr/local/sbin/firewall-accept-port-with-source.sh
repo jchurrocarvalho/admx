@@ -22,11 +22,14 @@ usage()
 
 if [ "$5" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 ADD_RICH_RULE_ARG="rule family=\"$2\" source address=\"$3\" port protocol=\"$4\" port=\"$5\" accept"
 CMD="firewall-cmd  --zone=\"$1\" --add-rich-rule='$ADD_RICH_RULE_ARG'"
 
 eval "$CMD"
+retvalue=$?
+
+exit $retvalue
 

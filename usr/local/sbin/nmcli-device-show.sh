@@ -20,3 +20,5 @@ echo ""
 
 nmcli device show
 
+exit 0
+

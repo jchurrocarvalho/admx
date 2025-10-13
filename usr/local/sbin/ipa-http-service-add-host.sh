@@ -22,8 +22,11 @@ usage()
 
 if [ "$2" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 ipa service-add-host --hosts="$1" HTTP/"$2"
+retvalue=$?
+
+exit $retvalue
 

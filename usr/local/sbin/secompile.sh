@@ -22,12 +22,28 @@ usage()
 
 if [ "$2" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 DESTPATH=$1
 NAME=$2
 
-checkmodule -M -m -o $DESTPATH/$NAME.mod $DESTPATH/$NAME.te
-semodule_package -o $DESTPATH/$NAME.pp -m $DESTPATH/$NAME.mod
-semodule -i $DESTPATH/$NAME.pp
+checkmodule -M -m -o "$DESTPATH"/"$NAME".mod "$DESTPATH"/"$NAME".te
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
+
+semodule_package -o "$DESTPATH/$NAME".pp -m "$DESTPATH"/"$NAME".mod
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
+
+semodule -i "$DESTPATH/$NAME".pp
+retvalue=$?
+
+exit $retvalue
+

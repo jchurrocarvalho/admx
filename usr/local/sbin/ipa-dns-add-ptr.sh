@@ -22,7 +22,7 @@ usage()
 
 if [ "$3" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 ZONE="$1"
@@ -30,4 +30,7 @@ NUMBER="$2"
 DNSHOSTNAME="$3"
 
 ipa dnsrecord-add "$ZONE" "$NUMBER" --ptr-rec "$DNSHOSTNAME"
+retvalue=$?
+
+exit $retvalue
 

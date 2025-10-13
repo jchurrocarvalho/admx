@@ -22,12 +22,13 @@ usage()
 
 if [ "$1" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 #
 
 i=0
+retvalue=0
 
 for arg in "$@"; do
     echo ">> Path: $arg"
@@ -35,8 +36,13 @@ for arg in "$@"; do
     find -L "$arg" -type d \
         -perm /o=w \
         -print
+    retvalue=$?
+    if [ "$retvalue" != "0" ]; then
+        echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+        break
+    fi
     i=$((i+1))
 done
 
-exit 0
+exit $retvalue
 

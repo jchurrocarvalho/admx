@@ -22,7 +22,7 @@ usage()
 
 if [ "$2" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 connection_name="$1"
@@ -34,4 +34,7 @@ echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 echo ""
 
 nmcli connection modify "$connection_name" ipv4.dns "$dns_list"
+retvalue=$?
+
+exit $retvalue
 

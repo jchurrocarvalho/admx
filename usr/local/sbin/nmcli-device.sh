@@ -32,3 +32,5 @@ echo ""
 
 nmcli -t device
 
+exit 0
+

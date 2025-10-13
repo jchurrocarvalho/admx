@@ -16,3 +16,5 @@
 
 lsblk --all -o name,fstype,size,mountpoint,label,uuid
 
+exit 0
+

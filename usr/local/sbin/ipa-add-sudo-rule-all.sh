@@ -15,4 +15,7 @@
 #
 
 ipa sudorule-add sudoall --hostcat=all --runasusercat=all --runasgroupcat=all --cmdcat=all
+retvalue=$?
+
+exit $retvalue
 

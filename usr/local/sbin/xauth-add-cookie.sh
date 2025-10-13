@@ -26,12 +26,15 @@ usage()
 
 if [ "$3" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 HOSTNAME="$1"
 DISPLAYNUM="$2"
 HEXKEY="$3"
 
-xauth add $HOSTNAME/unix:$DISPLAYNUM MIT-MAGIC-COOKIE-1 $HEXKEY
+xauth add "$HOSTNAME"/"unix":"$DISPLAYNUM MIT-MAGIC-COOKIE-1" "$HEXKEY"
+retvalue=$?
+
+exit $retvalue
 

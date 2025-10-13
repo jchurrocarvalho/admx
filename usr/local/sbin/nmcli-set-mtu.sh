@@ -25,7 +25,7 @@ usage()
 
 if [ "$3" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 connection_name="$1"
@@ -35,5 +35,8 @@ echo "NetworkManager set mtu. connection name: $connection_name, mtu param name:
 echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo ""
 
-nmcli connection modify "$connection_name" $2 $3
+nmcli connection modify "$connection_name" "$2" "$3"
+retvalue=$?
+
+exit $retvalue
 

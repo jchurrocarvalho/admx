@@ -16,3 +16,5 @@
 
 iscsiadm --mode node --login
 
+exit 0
+

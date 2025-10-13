@@ -23,4 +23,7 @@ if [ -L "/usr/bin/dnf4" ] || [ -e "/usr/bin/dnf4" ]; then
 else
     dnf repoquery --queryformat '%40{name}%2{epoch}%16{version}%8{arch}%32{reponame}\t%{evr}' "$@"
 fi
+retvalue=$?
+
+exit $retvalue
 

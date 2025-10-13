@@ -22,7 +22,7 @@ usage()
 
 if [ "$2" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 connection_name="$1"
@@ -33,5 +33,8 @@ echo "NetworkManager set gateway. connection name: $connection_name, gateway: $g
 echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo ""
 
-nmcli connection modify "$connection_name" ipv4.gateway $gateway
+nmcli connection modify "$connection_name" ipv4.gateway "$gateway"
+retvalue=$?
+
+exit $retvalue
 

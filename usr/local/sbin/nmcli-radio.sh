@@ -19,4 +19,7 @@ echo "---- nmcli radio all ----"
 echo ""
 
 nmcli radio all
+retvalue=$?
+
+exit $retvalue
 

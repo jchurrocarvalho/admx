@@ -22,7 +22,7 @@ usage()
 
 if [ "$4" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 DNSDOMAIN="$1"
@@ -31,4 +31,7 @@ IP="$3"
 NEWIP="$4"
 
 ipa dnsrecord-mod "$DNSDOMAIN" "$HOSTNAME" --a-rec "$IP" --a-ip-address "$NEWIP"
+retvalue=$?
+
+exit $retvalue
 

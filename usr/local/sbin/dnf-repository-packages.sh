@@ -16,3 +16,5 @@
 
 dnf repository-packages "$@"
 
+exit 0
+
