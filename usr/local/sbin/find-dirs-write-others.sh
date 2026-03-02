@@ -14,35 +14,58 @@
 # WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
+SCRIPTTITLE="find-dirs-write-others"
+
 usage()
 {
     echo "find writable dirs for others"
-    echo "Usage: find-dirs-write-others.sh <path> ..."
+    echo "Usage: $SCRIPTTITLE.sh <send also to syslog? (0/1)> <path> ..."
 }
 
-if [ "$1" = "" ]; then
+if [ "$2" = "" ]; then
     usage
     exit 2
 fi
 
 #
 
+if [ "$1" = "1" ]; then
+    SENDSYSLOG="1"
+else
+    SENDSYSLOG="0"
+fi
+
 i=0
 retvalue=0
 
+if [ "$SENDSYSLOG" = "1" ]; then
+    logger --tag "$SCRIPTTITLE" "INFO. $SCRIPTTITLE.sh has started."
+fi
 for arg in "$@"; do
-    echo ">> Path: $arg"
+    if [ $i -ge 1 ]; then
+        echo ">> Path: $arg"
 
-    find -L "$arg" -type d \
-        -perm /o=w \
-        -print
-    retvalue=$?
-    if [ "$retvalue" != "0" ]; then
-        echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-        break
+        if [ -d "$arg" ]; then
+            echo ">>>> Find dirs writable for others ..."
+            CMD='find -L "$arg" -type d -perm /o=w -print'
+            if [ "$SENDSYSLOG" = "1" ]; then
+                CMD="$CMD"" -exec logger --tag \"$SCRIPTTITLE\" \"WARN. dir writable for others: \"{} \;"
+            fi
+            eval "$CMD"
+            retvalue=$?
+            if [ "$retvalue" != "0" ]; then
+                echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+                #break
+            fi
+        else
+            echo ">>>> $arg directory does not exist."
+        fi
     fi
     i=$((i+1))
 done
+if [ "$SENDSYSLOG" = "1" ]; then
+    logger --tag "$SCRIPTTITLE" "INFO. $SCRIPTTITLE.sh has finshed."
+fi
 
 exit $retvalue
 

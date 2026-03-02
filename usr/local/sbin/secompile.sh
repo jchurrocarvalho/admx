@@ -16,7 +16,7 @@
 
 usage()
 {
-    echo "secomplie"
+    echo "selinux compile building policy module"
     echo "Usage: secompile.sh <destination path> <policy name module>"
 }
 

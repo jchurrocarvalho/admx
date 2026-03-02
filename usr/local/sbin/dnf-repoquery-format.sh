@@ -18,7 +18,7 @@
 # --installed, --all, etc ...
 #
 
-if [ -L "/usr/bin/dnf4" ] || [ -e "/usr/bin/dnf4" ]; then
+if [ -L "/usr/bin/dnf5" ] || [ -e "/usr/bin/dnf5" ]; then
     dnf repoquery --queryformat '%40{name}%2{epoch}%16{version}%8{arch}%32{reponame}\t%{evr}\n' "$@"
 else
     dnf repoquery --queryformat '%40{name}%2{epoch}%16{version}%8{arch}%32{reponame}\t%{evr}' "$@"

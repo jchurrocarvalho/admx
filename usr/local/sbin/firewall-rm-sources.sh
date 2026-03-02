@@ -25,10 +25,10 @@ if [ "$2" = "" ]; then
     exit 2
 fi
 
-FWZONE="$1"
+ZONE="$1"
 SOURCEADDRESS="$2"
 
-firewall-cmd --zone="$FWZONE" --remove-source="$SOURCEADDRESS"
+firewall-cmd --zone="$ZONE" --remove-source="$SOURCEADDRESS"
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"

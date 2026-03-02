@@ -35,5 +35,5 @@ else
 fi
 export PKICA_CA_HOME
 
-exit 0
+return 0
 

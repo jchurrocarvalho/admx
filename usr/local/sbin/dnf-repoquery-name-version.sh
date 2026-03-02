@@ -14,7 +14,7 @@
 # WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-if [ -L "/usr/bin/dnf4" ] || [ -e "/usr/bin/dnf4" ]; then
+if [ -L "/usr/bin/dnf5" ] || [ -e "/usr/bin/dnf5" ]; then
     dnf repoquery --queryformat '%40{name}%32{reponame}\t%{version}\n' "$@"
 else
     dnf repoquery --queryformat '%40{name}%32{reponame}\t%{version}' "$@"

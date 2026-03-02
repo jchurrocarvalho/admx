@@ -14,42 +14,67 @@
 # WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
+SCRIPTTITLE="find-unsecure-others"
+
 usage()
 {
     echo "find unsecure files (others perms) that can contain danger words or data"
     echo "Now search for .conf .cfg .properties .xml .log .txt .rb .yml files"
     echo "Search for keywords like password, passwd, pwd, credentials, secret, pass"
     echo "To improve ... just add keywords and file extensions ..."
-    echo "Usage: find-unsecure-others.sh <path> ..."
+    echo "Usage: $SCRIPTTITLE.sh <send also to syslog? (0/1)> <path> ..."
 }
 
-if [ "$1" = "" ]; then
+if [ "$2" = "" ]; then
     usage
     exit 2
 fi
 
 #
 
+if [ "$1" = "1" ]; then
+    SENDSYSLOG="1"
+else
+    SENDSYSLOG="0"
+fi
+
 i=0
 retvalue=0
 
+if [ "$SENDSYSLOG" = "1" ]; then
+    logger --tag "$SCRIPTTITLE" "INFO. $SCRIPTTITLE.sh has started."
+fi
 for arg in "$@"; do
-    echo ">> Path: $arg"
+    if [ $i -ge 1 ]; then
+        echo ">> Path: $arg"
 
-    find -L "$arg" -type f \
-        \( -iname "*.xml" -o -iname "*.conf*" -o -iname "*.properties*" -o -iname "*.cfg*" \
-            -o -iname "*.log" -o -iname "*.txt" \
-            -o -iname "*.rb" -o -iname "*.yml" -o -iname "*.yaml" \
-            -o -name "*.service" \) \
-        -perm /o=rwx \
-        -exec grep -i --with-filename -e "(password)|(pwd)|(passwd)|(creden)|(pass)|(secret)|(login)" '{}' \;
-    retvalue=$?
-    if [ "$retvalue" != "0" ]; then
-        echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-        break
+        if [ -d "$arg" ]; then
+            echo ">>>> Find unsecure files (others perms) that can contain danger words or data ..."
+            CMD='find -L "$arg" -type f \
+                \( -iname "*.xml" -o -iname "*.conf*" -o -iname "*.properties*" -o -iname "*.cfg*" \
+                    -o -iname "*.log" -o -iname "*.txt" \
+                    -o -iname "*.rb" -o -iname "*.yml" -o -iname "*.yaml" \
+                    -o -name "*.service" -o -name "*.*sh" \) \
+                -perm /o=rwx \
+                -exec grep -i --with-filename -e "(password)|(pwd)|(passwd)|(creden)|(pass)|(secret)|(login)" '{}' \;'
+            if [ "$SENDSYSLOG" = "1" ]; then
+                CMD="$CMD"" -exec logger --tag \"$SCRIPTTITLE\" \"WARN. unsecure file: \"{} \;"
+            fi
+            eval "$CMD"
+            retvalue=$?
+            if [ "$retvalue" != "0" ]; then
+                echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+                #break
+            fi
+        else
+            echo ">>>> $arg directory does not exist."
+        fi
     fi
     i=$((i+1))
 done
+if [ "$SENDSYSLOG" = "1" ]; then
+    logger --tag "$SCRIPTTITLE" "INFO. $SCRIPTTITLE.sh has finshed."
+fi
 
 exit $retvalue
 
