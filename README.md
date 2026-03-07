@@ -131,3 +131,7 @@ Products to see:
 
 - Introduce the json format for reading host list.
 - Update dnf scripts to dnf5.
+
+## C++ ACL sync tool
+
+A new C++ (Clang + CMake) tool is available in `cpp/acl_sync` to copy owner user/group mode permissions to ACL entries on files or directories. See `cpp/acl_sync/README.md` for build, test, symbolic execution, and VS Code usage.
